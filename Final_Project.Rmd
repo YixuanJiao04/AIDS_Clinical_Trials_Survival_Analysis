@@ -1,0 +1,19 @@
+---
+title: "Final Project"
+author: "Yixuan Jiao"
+date: "2023-10-03"
+output: pdf_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+df <- read_csv("AIDS_Clinical_Trials_Group175.csv")
+```
+
+```{r}
+view(df)
+```
+
