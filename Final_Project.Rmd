@@ -10,7 +10,7 @@ library(tidyverse)
 ```
 
 ```{r}
-df <- read_csv("AIDS_Clinical_Trials_Group175.csv")
+df <- read_csv("data/AIDS_Clinical_Trials_Group175.csv")
 ```
 
 ```{r}

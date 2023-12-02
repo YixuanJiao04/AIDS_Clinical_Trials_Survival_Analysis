@@ -1,0 +1,52 @@
+---
+title: "Non-Parametric estimate & test"
+author: "Yixuan Jiao"
+date: "2023-10-03"
+output: pdf_document
+---
+
+```{r}
+library(tidyverse)
+library(survival)
+library(survminer)
+aids <- read_csv("data/AIDS_Clinical_Trials_Group175.csv")
+```
+
+```{r}
+aids %>% head()
+```
+
+```{r}
+km_fit_trt <- survfit(Surv(time, cid) ~ trt, data = aids)
+km_fit_trt %>% ggsurvplot(data = aids,
+                      fun = "pct", #can be replaced by cum hazard
+                      conf.int = TRUE,
+                      risk.table = TRUE,
+                      fontsize = 2,
+                      ggtheme = theme_light(),
+                      title = "Kaplan-Meier Survival Function Estimate",
+                      legend.title = "",
+                      legend.labs = levels(aids$trt))
+```
+
+```{r}
+km_fit_treat <- survfit(Surv(time, cid) ~ treat, data = aids)
+km_fit_treat %>% ggsurvplot(data = aids,
+                      fun = "pct", #can be replaced by cum hazard
+                      conf.int = TRUE,
+                      risk.table = TRUE,
+                      fontsize = 3,
+                      ggtheme = theme_light(),
+                      title = "Kaplan-Meier Survival Function Estimate",
+                      legend.title = "",
+                      legend.labs = levels(aids$trt))
+```
+
+```{r}
+survdiff(Surv(time, cid) ~ trt, data = aids)
+```
+
+```{r}
+survdiff(Surv(time, cid) ~ treat, data = aids)
+```
+
