@@ -7,13 +7,18 @@ output: pdf_document
 
 ```{r}
 library(tidyverse)
-```
-
-```{r}
 df <- read_csv("data/AIDS_Clinical_Trials_Group175.csv")
 ```
 
-```{r}
-view(df)
-```
+# Backgroud
+
+# Methods
+
+# Results
+
+# Interpretation & Discussion
+
+# Conclusion
+
+
 
