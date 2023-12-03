@@ -1,0 +1,15 @@
+---
+title: "eda"
+author: "Yining Chen"
+date: "2023-12-03"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+aids <- read.csv('data/AIDS_Clinical_Trials_Group175.csv')
+```
+
