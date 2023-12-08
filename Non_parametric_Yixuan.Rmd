@@ -9,6 +9,7 @@ output: pdf_document
 library(tidyverse)
 library(survival)
 library(survminer)
+library(biostat3)
 aids <- read_csv("data/AIDS_Clinical_Trials_Group175.csv")
 ```
 
@@ -17,6 +18,7 @@ aids %>% head()
 ```
 
 ```{r}
+#KM
 km_fit_trt <- survfit(Surv(time, cid) ~ trt, data = aids)
 km_fit_trt %>% ggsurvplot(data = aids,
                       fun = "pct", #can be replaced by cum hazard
@@ -26,27 +28,46 @@ km_fit_trt %>% ggsurvplot(data = aids,
                       ggtheme = theme_light(),
                       title = "Kaplan-Meier Survival Function Estimate",
                       legend.title = "",
-                      legend.labs = levels(aids$trt))
+                      legend.labs = levels(aids$trt),
+                      ylim = c(55, 100))
 ```
 
 ```{r}
-km_fit_treat <- survfit(Surv(time, cid) ~ treat, data = aids)
-km_fit_treat %>% ggsurvplot(data = aids,
+#FH
+km_fit_trt_fh <- survfit(Surv(time, cid) ~ trt, data = aids, type = "fleming-harrington")
+km_fit_trt_fh %>% ggsurvplot(data = aids,
                       fun = "pct", #can be replaced by cum hazard
                       conf.int = TRUE,
                       risk.table = TRUE,
-                      fontsize = 3,
+                      fontsize = 2,
                       ggtheme = theme_light(),
                       title = "Kaplan-Meier Survival Function Estimate",
                       legend.title = "",
-                      legend.labs = levels(aids$trt))
+                      legend.labs = levels(aids$trt),
+                      ylim = c(55, 100))
 ```
+
+```{r}
+#life table
+trt0 <- lifetab2(Surv(time,cid) ~ trt, aids)[[1]]
+trt1 <- lifetab2(Surv(time,cid) ~ trt, aids)[[2]]
+trt2 <- lifetab2(Surv(time,cid) ~ trt, aids)[[3]]
+trt3 <- lifetab2(Surv(time,cid) ~ trt, aids)[[4]]
+
+ggplot() + 
+  geom_line(data = trt0, aes(x = tstart, y = surv, color = "trt0")) +
+  geom_line(data = trt1, aes(x = tstart, y = surv,color = "trt1")) +
+  geom_line(data = trt2, aes(x = tstart, y = surv,color = "trt2")) +
+  geom_line(data = trt3, aes(x = tstart, y = surv,color = "trt3")) +
+  labs(color = "trt")
+```
+
 
 ```{r}
 survdiff(Surv(time, cid) ~ trt, data = aids)
 ```
 
 ```{r}
-survdiff(Surv(time, cid) ~ treat, data = aids)
+pairwise_survdiff(Surv(time, cid) ~ trt, data = aids,p.adjust.method = "holm")
 ```
 
