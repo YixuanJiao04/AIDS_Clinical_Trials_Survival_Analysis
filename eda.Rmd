@@ -7,9 +7,143 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(finalfit)
+library(dplyr)
+library(tidyverse)
+library(kableExtra)
+library(ggplot2)
+library(ggpubr)
 ```
 
 ```{r}
 aids <- read.csv('data/AIDS_Clinical_Trials_Group175.csv')
+aids <- aids%>%
+  mutate(cid = as.factor(cid),
+         
+         trt = as.factor(trt),treat=as.factor(treat),
+                                                                     hemo = as.factor(hemo),
+                                                                     homo = as.factor(homo),
+                                                                     drugs = as.factor(drugs),
+                                                                     race = as.factor(race),
+                                                                     gender = as.factor(gender),
+                                                                     str2 = as.factor(str2),
+                                                                     symptom = as.factor(symptom))
 ```
+
+```{r}
+aids <- aids%>%
+  mutate(cid=factor(cid,
+  levels = c(0,1),
+  labels = c("Censoring", 
+             "Failure")),
+  treat=factor(treat,
+  levels = c(0,1),
+  labels = c("ZDV only", 
+             "Others")),
+  hemo=factor(hemo,
+  levels = c(0,1),
+  labels = c("No", 
+             "Yes")),
+  homo=factor(homo,
+  levels = c(0,1),
+  labels = c("No", 
+             "Yes")),
+  gender=factor(gender,
+  levels = c(0,1),
+  labels = c("Female", 
+             "Male")),
+  race=factor(race,
+  levels = c(0,1),
+  labels = c("White", 
+             "Non-white")),
+  drugs=factor(drugs,
+  levels = c(0,1),
+  labels = c("No", 
+             "Yes")),
+  symptom=factor(symptom,
+  levels = c(0,1),
+  labels = c("No", 
+             "Yes"))
+  )
+```
+
+## sex age race hemo homo drug kanor symptom cd40
+```{r}
+explanatory = c("age", "hemo", "homo", "race","gender","drugs","karnof","cd40","symptom","cd80","wtkg")
+dependent = "treat"
+baseline <- aids %>%
+  mutate(
+        cd80 = ff_label(cd80, "CD8 Count"),
+        wtkg = ff_label(wtkg, "Weight"),
+        gender = ff_label(gender, "Gender"),
+        hemo = ff_label(hemo, "Hemophilia"),
+        homo = ff_label(homo, "Homosexuality"),
+        race = ff_label(race, "Race"),
+        drugs = ff_label(drugs, "History of IV drug use "),
+        karnof = ff_label(karnof, "Karnofsky score of 100"),
+        cd40 = ff_label(cd40, "CD4 count"),
+        age = ff_label(age, "Age"),
+        symptom = ff_label(symptom, "Symptomatic infection"),
+        treat = ff_label(treat, "Treatment")
+    )%>%
+  summary_factorlist(dependent, explanatory,column = TRUE, total_col = TRUE,,col_totals_prefix = "N=",add_dependent_label = TRUE) 
+
+baseline
+
+kable(baseline,caption = "Base-Line Characteristics of the Patients According to the Treatment Indicator", booktabs=T)%>% kable_styling(latex_option = c("hold_position"), position = "center")
+```
+```{r}
+ggplot(data=aids, aes(x=treat, fill=cid)) +
+  geom_bar()+
+  scale_fill_brewer(palette="Pastel1")+
+  ggtitle("Figure 1: Distribution of  Treatment VS. Patient Status")+
+  guides(fill = guide_legend(title = "Treatment"))
+```
+
+```{r}
+ggplot(aids, aes(x=age, fill=cid)) +
+  geom_histogram(alpha=0.5, position="identity")+
+  scale_fill_brewer(palette ="Pastel1")+
+  ggtitle("Figure 2: Distribution of Patient Age VS. Status")
+
+ggplot(aids, aes(x=wtkg, fill=cid)) +
+  geom_histogram(alpha=0.5, position="identity")+
+  scale_fill_brewer(palette ="Pastel1")+
+  ggtitle("Figure 2: Distribution of Patient Weight VS. Status")
+```
+```{r}
+ggplot(aids, aes(x=time, fill=cid)) +
+  geom_histogram(alpha=0.5, position="identity")+
+  scale_fill_brewer(palette ="Pastel1")+
+  ggtitle("Figure 3: Distribution of Time to Failure or Censoring")
+```
+```{r}
+p1 <- ggplot(aids,aes(x= treat, y=cd40,color=treat)) + geom_boxplot(show.legend = FALSE)+labs(x="")+scale_color_manual( values = c("#DC9FB4", "mediumpurple"))+theme(axis.title.y = element_text(size=8))+
+  theme_minimal()+ 
+ scale_y_continuous(limits = c(0, 1000))
+
+
+p2 <- ggplot(aids,aes(x= treat, y=cd420,color=treat)) + geom_boxplot(show.legend = FALSE)+labs(x="")+scale_color_manual( values = c("#DC9FB4", "mediumpurple"))+theme(axis.title.y = element_text(size=8))+
+  theme_minimal()+
+ scale_y_continuous(limits = c(0, 1000))
+
+p <- ggpubr::ggarrange(p1, p2, ncol=2,nrow = 1,common.legend = TRUE)
+
+ggpubr::annotate_figure(p, top = ggpubr::text_grob("Figure 4: CD4 Count Change VS. Treatment Groups", color = "darkgrey",face = "bold", size = 13))
+```
+
+```{r}
+p3 <- ggplot(aids,aes(x= treat, y=cd80,color=treat)) + geom_boxplot(show.legend = FALSE)+labs(x="")+scale_color_manual( values = c("#DC9FB4", "mediumpurple"))+theme(axis.title.y = element_text(size=8))+
+  theme_minimal()+ 
+ scale_y_continuous(limits = c(0, 4000))
+
+p4 <- ggplot(aids,aes(x= treat, y=cd820,color=treat)) + geom_boxplot(show.legend = FALSE)+labs(x="")+scale_color_manual( values = c("#DC9FB4", "mediumpurple"))+theme(axis.title.y = element_text(size=8))+
+  theme_minimal()+ 
+ scale_y_continuous(limits = c(0, 4000))
+
+p<- ggarrange(p3,p4,ncol=2,align = "hv",nrow = 1,common.legend = TRUE)
+annotate_figure(p, top = text_grob("Figure 5: CD8 Count Change VS. Treatment Groups", color = "#0F2540",face = "bold", size = 13))
+```
+
+
 
