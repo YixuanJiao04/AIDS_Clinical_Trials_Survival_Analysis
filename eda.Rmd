@@ -109,13 +109,13 @@ ggplot(aids, aes(x=age, fill=cid)) +
 ggplot(aids, aes(x=wtkg, fill=cid)) +
   geom_histogram(alpha=0.5, position="identity")+
   scale_fill_brewer(palette ="Pastel1")+
-  ggtitle("Figure 2: Distribution of Patient Weight VS. Status")
+  ggtitle("Figure 3: Distribution of Patient Weight VS. Status")
 ```
 ```{r}
 ggplot(aids, aes(x=time, fill=cid)) +
   geom_histogram(alpha=0.5, position="identity")+
   scale_fill_brewer(palette ="Pastel1")+
-  ggtitle("Figure 3: Distribution of Time to Failure or Censoring")
+  ggtitle("Figure 4: Distribution of Time to Failure or Censoring")
 ```
 ```{r}
 p1 <- ggplot(aids,aes(x= treat, y=cd40,color=treat)) + geom_boxplot(show.legend = FALSE)+labs(x="")+scale_color_manual( values = c("#DC9FB4", "mediumpurple"))+theme(axis.title.y = element_text(size=8))+
@@ -129,7 +129,7 @@ p2 <- ggplot(aids,aes(x= treat, y=cd420,color=treat)) + geom_boxplot(show.legend
 
 p <- ggpubr::ggarrange(p1, p2, ncol=2,nrow = 1,common.legend = TRUE)
 
-ggpubr::annotate_figure(p, top = ggpubr::text_grob("Figure 4: CD4 Count Change VS. Treatment Groups", color = "darkgrey",face = "bold", size = 13))
+ggpubr::annotate_figure(p, top = ggpubr::text_grob("Figure 5: CD4 Count Change VS. Treatment Groups", color = "darkgrey",face = "bold", size = 13))
 ```
 
 ```{r}
@@ -142,7 +142,7 @@ p4 <- ggplot(aids,aes(x= treat, y=cd820,color=treat)) + geom_boxplot(show.legend
  scale_y_continuous(limits = c(0, 4000))
 
 p<- ggarrange(p3,p4,ncol=2,align = "hv",nrow = 1,common.legend = TRUE)
-annotate_figure(p, top = text_grob("Figure 5: CD8 Count Change VS. Treatment Groups", color = "#0F2540",face = "bold", size = 13))
+annotate_figure(p, top = text_grob("Figure 6: CD8 Count Change VS. Treatment Groups", color = "#0F2540",face = "bold", size = 13))
 ```
 
 
