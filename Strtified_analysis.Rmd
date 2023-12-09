@@ -1,0 +1,233 @@
+---
+title: "8180_final"
+author: "Qingzhen Sun"
+date: "2023-12-08"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(survival)
+library(survminer)
+library(biostat3)
+```
+
+```{r}
+aids <- read_csv("data/AIDS_Clinical_Trials_Group175.csv")
+```
+
+### KM curve for zdv history stratify
+```{r}
+# non-ZDV treatment history
+aids_non_zdv = aids%>%
+```
+
+
+```{r}
+filter(oprior == 1)
+```
+
+```{r}
+km_fit_trt1 <- survfit(Surv(time, cid) ~ trt, data = aids_non_zdv)
+km_fit_trt1 %>% ggsurvplot(data = aids_non_zdv,
+                      fun = "pct", 
+                      conf.int = TRUE,
+                      risk.table = TRUE,
+                      fontsize = 2,
+                      ggtheme = theme_light(),
+                      title = "Kaplan-Meier Estimate Without ZDV History",
+                      legend.title = "",
+                      legend.labs = levels(aids$trt),
+                      ylim = c(55, 100))
+```
+
+
+```{r}
+# ZDV in the 30 days prior to 175
+aids_z30 = aids%>%
+  filter(z30 == 1)
+```
+
+```{r}
+km_fit_trt2 <- survfit(Surv(time, cid) ~ trt, data = aids_z30)
+km_fit_trt2 %>% ggsurvplot(data = aids_z30,
+                      fun = "pct", 
+                      conf.int = TRUE,
+                      risk.table = TRUE,
+                      fontsize = 2,
+                      ggtheme = theme_light(),
+                      title = "Kaplan-Meier Estimate With ZDV 30 days prior",
+                      legend.title = "",
+                      legend.labs = levels(aids$trt),
+                      ylim = c(55, 100))
+```
+
+```{r}
+# ZDV prior to 175
+aids_zprior = aids%>%
+  filter(zprior == 1)
+```
+
+```{r}
+km_fit_trt3 <- survfit(Surv(time, cid) ~ trt, data = aids_zprior)
+km_fit_trt3 %>% ggsurvplot(data = aids_zprior,
+                      fun = "pct", 
+                      conf.int = TRUE,
+                      risk.table = TRUE,
+                      fontsize = 2,
+                      ggtheme = theme_light(),
+                      title = "Kaplan-Meier Estimate With ZDV prior to study",
+                      legend.title = "",
+                      legend.labs = levels(aids$trt),
+                      ylim = c(55, 100))
+```
+```{r}
+survfit_result_zdv <- survfit(Surv(time, cid) ~ strata(oprior) + trt, data = aids)
+survfit_result_zdv
+```
+
+
+### KM Curve for medical history stratify
+```{r}
+# patient with drug used and has hemophilia
+aids_hemo_drug = aids%>%
+  filter(hemo==1)%>%
+  filter(drugs ==1)
+```
+
+```{r}
+km_fit_trt4 <- survfit(Surv(time, cid) ~ trt, data = aids_hemo_drug)
+km_fit_trt4 %>% ggsurvplot(data = aids_hemo_drug,
+                      fun = "pct", 
+                      conf.int = TRUE,
+                      risk.table = TRUE,
+                      fontsize = 2,
+                      ggtheme = theme_light(),
+                      title = "Kaplan-Meier Estimate With Drugs and Hemophilia",
+                      legend.title = "",
+                      legend.labs = levels(aids$trt),
+                      ylim = c(55, 100))
+```
+
+```{r}
+# patient with drug used and doesn't have hemophilia
+aids_drug = aids%>%
+  filter(hemo==0)%>%
+  filter(drugs ==1)
+```
+
+```{r}
+km_fit_trt5 <- survfit(Surv(time, cid) ~ trt, data = aids_drug)
+km_fit_trt5 %>% ggsurvplot(data = aids_drug,
+                      fun = "pct", 
+                      conf.int = TRUE,
+                      risk.table = TRUE,
+                      fontsize = 2,
+                      ggtheme = theme_light(),
+                      title = "Kaplan-Meier Estimate With Drug Used",
+                      legend.title = "",
+                      legend.labs = levels(aids$trt),
+                      ylim = c(55, 100))
+```
+
+```{r}
+# patient without drug used but has hemophilia
+aids_hemo = aids%>%
+  filter(hemo==1)%>%
+  filter(drugs ==0)
+```
+
+```{r}
+km_fit_trt6 <- survfit(Surv(time, cid) ~ trt, data = aids_hemo)
+km_fit_trt6 %>% ggsurvplot(data = aids_hemo,
+                      fun = "pct", 
+                      conf.int = TRUE,
+                      risk.table = TRUE,
+                      fontsize = 2,
+                      ggtheme = theme_light(),
+                      title = "Kaplan-Meier Estimate With Hemophilia",
+                      legend.title = "",
+                      legend.labs = levels(aids$trt),
+                      ylim = c(55, 100))
+```
+```{r}
+# patient without drug used and doesn't have hemophilia
+aids_nomedical = aids%>%
+  filter(hemo==0)%>%
+  filter(drugs ==0)
+```
+
+```{r}
+km_fit_trt7 <- survfit(Surv(time, cid) ~ trt, data = aids_nomedical)
+km_fit_trt7 %>% ggsurvplot(data = aids_nomedical,
+                      fun = "pct", 
+                      conf.int = TRUE,
+                      risk.table = TRUE,
+                      fontsize = 2,
+                      ggtheme = theme_light(),
+                      title = "Kaplan-Meier Estimate Without medical history",
+                      legend.title = "",
+                      legend.labs = levels(aids$trt),
+                      ylim = c(55, 100))
+
+```
+```{r}
+survfit_result_drug <- survfit(Surv(time, cid) ~ strata(drugs) + trt, data = aids)
+survfit_result_drug
+survfit_result_hemo <- survfit(Surv(time, cid) ~ strata(hemo) + trt, data = aids)
+survfit_result_hemo
+```
+
+
+### KM curve for patient with or without azt therapy before
+
+```{r}
+# patient with azt theorpy before
+aids_azt_yes = aids%>%
+  filter(str2==1)
+```
+
+```{r}
+km_fit_trt8 <- survfit(Surv(time, cid) ~ trt, data = aids_azt_yes)
+km_fit_trt8 %>% ggsurvplot(data = aids_azt_yes,
+                      fun = "pct", 
+                      conf.int = TRUE,
+                      risk.table = TRUE,
+                      fontsize = 2,
+                      ggtheme = theme_light(),
+                      title = "Kaplan-Meier Estimate Without medical history",
+                      legend.title = "",
+                      legend.labs = levels(aids$trt),
+                      ylim = c(55, 100))
+
+```
+
+
+
+```{r}
+# patient without azt therapy before
+aids_azt_no = aids%>%
+  filter(str2==0)
+```
+
+```{r}
+km_fit_trt9 <- survfit(Surv(time, cid) ~ trt, data = aids_azt_no)
+km_fit_trt9 %>% ggsurvplot(data = aids_azt_no,
+                      fun = "pct", 
+                      conf.int = TRUE,
+                      risk.table = TRUE,
+                      fontsize = 2,
+                      ggtheme = theme_light(),
+                      title = "Kaplan-Meier Estimate Without medical history",
+                      legend.title = "",
+                      legend.labs = levels(aids$trt),
+                      ylim = c(55, 100))
+
+```
+```{r}
+survfit_result_azt <- survfit(Surv(time, cid) ~ strata(str2) + trt, data = aids)
+survfit_result_azt
+```
+
+
+

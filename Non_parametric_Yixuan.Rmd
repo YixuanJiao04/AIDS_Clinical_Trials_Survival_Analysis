@@ -28,22 +28,25 @@ km_fit_trt %>% ggsurvplot(data = aids,
                       ggtheme = theme_light(),
                       title = "Kaplan-Meier Survival Function Estimate",
                       legend.title = "",
-                      legend.labs = levels(aids$trt),
+                      legend.labs = c("ZDV only","ZDV + ddl", "ZDV + Zal", "ddl only"),
                       ylim = c(55, 100))
 ```
 
 ```{r}
 #FH
-km_fit_trt_fh <- survfit(Surv(time, cid) ~ trt, data = aids, type = "fleming-harrington")
-km_fit_trt_fh %>% ggsurvplot(data = aids,
+fh_fit_trt <- survfit(Surv(time, cid) ~ trt, type = "fleming", data = aids)
+fh_fit_trt %>% ggsurvplot(data = aids,
                       fun = "pct", #can be replaced by cum hazard
                       conf.int = TRUE,
                       risk.table = TRUE,
+                      pval = TRUE,  
+                      pval.cord = c(0,60),
                       fontsize = 2,
                       ggtheme = theme_light(),
-                      title = "Kaplan-Meier Survival Function Estimate",
+                      xlab =  "Time in days",
+                      title = "Fleming-Harrington Survival Function Estimate",
                       legend.title = "",
-                      legend.labs = levels(aids$trt),
+                      legend.labs = c("ZDV only","ZDV + ddl", "ZDV + Zal", "ddl only"),
                       ylim = c(55, 100))
 ```
 
@@ -55,11 +58,15 @@ trt2 <- lifetab2(Surv(time,cid) ~ trt, aids)[[3]]
 trt3 <- lifetab2(Surv(time,cid) ~ trt, aids)[[4]]
 
 ggplot() + 
-  geom_line(data = trt0, aes(x = tstart, y = surv, color = "trt0")) +
-  geom_line(data = trt1, aes(x = tstart, y = surv,color = "trt1")) +
-  geom_line(data = trt2, aes(x = tstart, y = surv,color = "trt2")) +
-  geom_line(data = trt3, aes(x = tstart, y = surv,color = "trt3")) +
-  labs(color = "trt")
+  geom_line(data = trt0, aes(x = tstart, y = surv, color = "ZDV only")) +
+  geom_line(data = trt1, aes(x = tstart, y = surv,color = "ZDV + ddl")) +
+  geom_line(data = trt2, aes(x = tstart, y = surv,color = "ZDV + Zal")) +
+  geom_line(data = trt3, aes(x = tstart, y = surv,color = "ddl only")) +
+  labs(color = "treatment")
+```
+
+```{r}
+quantile(km_fit_trt)
 ```
 
 
