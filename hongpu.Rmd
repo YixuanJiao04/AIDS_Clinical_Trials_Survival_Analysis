@@ -62,29 +62,16 @@ cox2 = coxph(Surv(time, cid) ~ trt + age_group + drugs + karnof + str2 + symptom
 summary(cox2)
 ```
 
-*model with age_51-70*
-```{r}
-aids = aids %>% mutate(old_age = as.factor(ifelse(age >= 51 & age <= 70, 1, 0)))
-```
-
-```{r}
-cox3 = coxph(Surv(time, cid) ~ trt + old_age + drugs + karnof + str2 + symptom + cd40 + cd80, data = aids)
-```
-
-```{r}
-summary(cox3)
-```
-
 #### model checking
 
 *check multicollinearity*
 ```{r}
-VIF(cox3)
+VIF(cox2)
 ```
 
 *Plot log-log survival curves*
 ```{r}
-plot(survfit(cox3),
+plot(survfit(cox2),
 fun = 'cloglog',
 conf.int = FALSE,
 col = 1,
@@ -96,7 +83,7 @@ main = "Log-Log Survival Curves")
 
 *Plot the observed and fitted*
 ```{r}
-sf = survfit(Surv(time, cid) ~ trt + old_age + drugs + karnof + str2 + symptom + cd40 + cd80, data = aids)
+sf = survfit(Surv(time, cid) ~ trt + age_group + drugs + karnof + str2 + symptom + cd40 + cd80, data = aids)
 
 plot(sf,
 col = 1,
@@ -105,7 +92,7 @@ xlab = "Time",
 ylab = "Survival Probability",
 main = "Observed vs Fitted Survival Curves")
 
-lines(survfit(cox3),
+lines(survfit(cox2),
 conf.int = FALSE,
 col = 2,
 lty = 2)
