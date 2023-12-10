@@ -1,0 +1,118 @@
+---
+title: "coxph"
+author: "min"
+date: "2023-12-02"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(survival)
+library(survminer)
+library(riskRegression)
+library(regclass)
+```
+
+```{r}
+aids = read_csv("data/AIDS_Clinical_Trials_Group175.csv") %>% mutate(trt = as.factor(trt),
+                                                                     hemo = as.factor(hemo),
+                                                                     homo = as.factor(homo),
+                                                                     drugs = as.factor(drugs),
+                                                                     race = as.factor(race),
+                                                                     gender = as.factor(gender),
+                                                                     str2 = as.factor(str2),
+                                                                     symptom = as.factor(symptom)) %>% select(time, cid, trt, age, wtkg, hemo, homo, drugs, karnof, race, gender, str2, symptom, cd40, cd80) %>% arrange(time)
+```
+
+#### model selection
+
+*selection on personal information*
+```{r}
+selectCox(Surv(time, cid) ~ trt + age + wtkg + homo + race + gender, data = aids, rule = "aic")
+```
+$In
+[1] "trt" "age"
+
+*selection on medical history/treatment history/lab results*
+```{r}
+selectCox(Surv(time, cid) ~ trt + hemo + drugs + karnof + str2 + symptom + cd40 + cd80, data = aids, rule = "aic")
+```
+$In
+[1] "trt"     "drugs"   "karnof"  "str2"    "symptom" "cd40"    "cd80"  
+
+*combine model*
+```{r}
+cox1 = coxph(Surv(time, cid) ~ trt + age + drugs + karnof + str2 + symptom + cd40 + cd80, data = aids)
+```
+
+```{r}
+summary(cox1)
+```
+
+*model with age_group*
+```{r}
+aids = aids %>% mutate(age_group = as.factor(ifelse(age >= 11 & age <= 30, "11-30", ifelse(age >= 31 & age <= 50, "31-50", "51-70"))))
+```
+
+```{r}
+cox2 = coxph(Surv(time, cid) ~ trt + age_group + drugs + karnof + str2 + symptom + cd40 + cd80, data = aids)
+```
+
+```{r}
+summary(cox2)
+```
+
+*model with age_51-70*
+```{r}
+aids = aids %>% mutate(old_age = as.factor(ifelse(age >= 51 & age <= 70, 1, 0)))
+```
+
+```{r}
+cox3 = coxph(Surv(time, cid) ~ trt + old_age + drugs + karnof + str2 + symptom + cd40 + cd80, data = aids)
+```
+
+```{r}
+summary(cox3)
+```
+
+#### model checking
+
+*check multicollinearity*
+```{r}
+VIF(cox3)
+```
+
+*Plot log-log survival curves*
+```{r}
+plot(survfit(cox3),
+fun = 'cloglog',
+conf.int = FALSE,
+col = 1,
+lty = 1,
+xlab = "Time",
+ylab = "Log-log of S(t)",
+main = "Log-Log Survival Curves")
+```
+
+*Plot the observed and fitted*
+```{r}
+sf = survfit(Surv(time, cid) ~ trt + old_age + drugs + karnof + str2 + symptom + cd40 + cd80, data = aids)
+
+plot(sf,
+col = 1,
+lty = 1,
+xlab = "Time",
+ylab = "Survival Probability",
+main = "Observed vs Fitted Survival Curves")
+
+lines(survfit(cox3),
+conf.int = FALSE,
+col = 2,
+lty = 2)
+
+legend("bottomleft",
+legend = c("KM", "Cox"),
+lty = c(1, 2),
+merge = TRUE)
+```
+
