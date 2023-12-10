@@ -76,9 +76,13 @@ summary(cox2)
 VIF(cox2)
 ```
 
-*Plot log-log survival curves*
+*Plot log-log survival curve*
 ```{r}
-plot(survfit(cox2),
+par(mfrow = c(2,4))
+var_list = names(aids)
+
+for (i in var_list) {
+plot(survfit(Surv(time, cid) ~ aids[[i]], data = aids),
 fun = 'cloglog',
 conf.int = FALSE,
 col = 1,
@@ -86,10 +90,13 @@ lty = 1,
 xlab = "Time",
 ylab = "Log-log of S(t)",
 main = "Log-Log Survival Curves")
+}
 ```
 
 *Plot the observed and fitted*
 ```{r}
+par(mfrow = c(1,1))
+
 plot(survfit(Surv(time, cid) ~ 1, data = aids),
 conf.int = FALSE,
 col = 1,
@@ -112,4 +119,3 @@ lty = c(1, 2),
 cex = 0.5,
 merge = TRUE)
 ```
-
