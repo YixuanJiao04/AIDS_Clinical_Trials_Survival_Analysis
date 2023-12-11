@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.11.17)  11 DEC 2023 12:51
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.11.17)  11 DEC 2023 17:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -641,99 +641,121 @@ Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-11-2.pdf  use
 [11 <./Appendix_files/figure-latex/unnamed-chunk-11-1.pdf>] [12 <./Appendix_files/figure-latex/unnamed-chunk-11-2.pdf>]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 675.
+(hyperref)                than one, level fixed on input line 679.
 
 [13]
-<Appendix_files/figure-latex/unnamed-chunk-16-1.pdf, id=174, 469.755pt x 325.215pt>
+<Appendix_files/figure-latex/unnamed-chunk-16-1.pdf, id=172, 469.755pt x 325.215pt>
 File: Appendix_files/figure-latex/unnamed-chunk-16-1.pdf Graphic file (type pdf)
 <use Appendix_files/figure-latex/unnamed-chunk-16-1.pdf>
-Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-16-1.pdf  used on input line 717.
+Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-16-1.pdf  used on input line 721.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [14 <./Appendix_files/figure-latex/unnamed-chunk-16-1.pdf>]
-<Appendix_files/figure-latex/unnamed-chunk-18-1.pdf, id=187, 469.755pt x 325.215pt>
+<Appendix_files/figure-latex/unnamed-chunk-18-1.pdf, id=186, 469.755pt x 325.215pt>
 File: Appendix_files/figure-latex/unnamed-chunk-18-1.pdf Graphic file (type pdf)
 <use Appendix_files/figure-latex/unnamed-chunk-18-1.pdf>
-Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-18-1.pdf  used on input line 743.
+Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-18-1.pdf  used on input line 747.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<Appendix_files/figure-latex/unnamed-chunk-20-1.pdf, id=188, 469.755pt x 325.215pt>
+[15 <./Appendix_files/figure-latex/unnamed-chunk-18-1.pdf>]
+<Appendix_files/figure-latex/unnamed-chunk-20-1.pdf, id=199, 469.755pt x 325.215pt>
 File: Appendix_files/figure-latex/unnamed-chunk-20-1.pdf Graphic file (type pdf)
 <use Appendix_files/figure-latex/unnamed-chunk-20-1.pdf>
-Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-20-1.pdf  used on input line 769.
+Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-20-1.pdf  used on input line 773.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[15 <./Appendix_files/figure-latex/unnamed-chunk-18-1.pdf>] [16 <./Appendix_files/figure-latex/unnamed-chunk-20-1.pdf>]
-<Appendix_files/figure-latex/unnamed-chunk-23-1.pdf, id=214, 469.755pt x 325.215pt>
+[16 <./Appendix_files/figure-latex/unnamed-chunk-20-1.pdf>]
+<Appendix_files/figure-latex/unnamed-chunk-23-1.pdf, id=213, 469.755pt x 325.215pt>
 File: Appendix_files/figure-latex/unnamed-chunk-23-1.pdf Graphic file (type pdf)
 <use Appendix_files/figure-latex/unnamed-chunk-23-1.pdf>
-Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-23-1.pdf  used on input line 837.
+Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-23-1.pdf  used on input line 841.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[17 <./Appendix_files/figure-latex/unnamed-chunk-23-1.pdf>]
-<Appendix_files/figure-latex/unnamed-chunk-25-1.pdf, id=228, 469.755pt x 325.215pt>
+[17]
+<Appendix_files/figure-latex/unnamed-chunk-25-1.pdf, id=218, 469.755pt x 325.215pt>
 File: Appendix_files/figure-latex/unnamed-chunk-25-1.pdf Graphic file (type pdf)
 <use Appendix_files/figure-latex/unnamed-chunk-25-1.pdf>
-Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-25-1.pdf  used on input line 864.
+Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-25-1.pdf  used on input line 868.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[18 <./Appendix_files/figure-latex/unnamed-chunk-25-1.pdf>]
-<Appendix_files/figure-latex/unnamed-chunk-27-1.pdf, id=241, 469.755pt x 325.215pt>
+[18 <./Appendix_files/figure-latex/unnamed-chunk-23-1.pdf>]
+<Appendix_files/figure-latex/unnamed-chunk-27-1.pdf, id=232, 469.755pt x 325.215pt>
 File: Appendix_files/figure-latex/unnamed-chunk-27-1.pdf Graphic file (type pdf)
 <use Appendix_files/figure-latex/unnamed-chunk-27-1.pdf>
-Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-27-1.pdf  used on input line 891.
+Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-27-1.pdf  used on input line 895.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<Appendix_files/figure-latex/unnamed-chunk-29-1.pdf, id=242, 469.755pt x 325.215pt>
+[19 <./Appendix_files/figure-latex/unnamed-chunk-25-1.pdf>]
+<Appendix_files/figure-latex/unnamed-chunk-29-1.pdf, id=246, 469.755pt x 325.215pt>
 File: Appendix_files/figure-latex/unnamed-chunk-29-1.pdf Graphic file (type pdf)
 <use Appendix_files/figure-latex/unnamed-chunk-29-1.pdf>
-Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-29-1.pdf  used on input line 918.
+Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-29-1.pdf  used on input line 922.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[19 <./Appendix_files/figure-latex/unnamed-chunk-27-1.pdf>] [20 <./Appendix_files/figure-latex/unnamed-chunk-29-1.pdf>]
-<Appendix_files/figure-latex/unnamed-chunk-32-1.pdf, id=268, 469.755pt x 325.215pt>
+[20 <./Appendix_files/figure-latex/unnamed-chunk-27-1.pdf>] [21 <./Appendix_files/figure-latex/unnamed-chunk-29-1.pdf>]
+<Appendix_files/figure-latex/unnamed-chunk-32-1.pdf, id=271, 469.755pt x 325.215pt>
 File: Appendix_files/figure-latex/unnamed-chunk-32-1.pdf Graphic file (type pdf)
 <use Appendix_files/figure-latex/unnamed-chunk-32-1.pdf>
-Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-32-1.pdf  used on input line 990.
+Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-32-1.pdf  used on input line 994.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[21 <./Appendix_files/figure-latex/unnamed-chunk-32-1.pdf>]
-<Appendix_files/figure-latex/unnamed-chunk-34-1.pdf, id=283, 469.755pt x 325.215pt>
+[22 <./Appendix_files/figure-latex/unnamed-chunk-32-1.pdf>]
+<Appendix_files/figure-latex/unnamed-chunk-34-1.pdf, id=286, 469.755pt x 325.215pt>
 File: Appendix_files/figure-latex/unnamed-chunk-34-1.pdf Graphic file (type pdf)
 <use Appendix_files/figure-latex/unnamed-chunk-34-1.pdf>
-Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-34-1.pdf  used on input line 1017.
+Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-34-1.pdf  used on input line 1021.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[22 <./Appendix_files/figure-latex/unnamed-chunk-34-1.pdf>] [23] [24] [25] [26] [27]
-<Appendix_files/figure-latex/unnamed-chunk-46-1.pdf, id=323, 469.755pt x 325.215pt>
+[23 <./Appendix_files/figure-latex/unnamed-chunk-34-1.pdf>] [24] [25] [26] [27] [28]
+<Appendix_files/figure-latex/unnamed-chunk-46-1.pdf, id=326, 469.755pt x 325.215pt>
 File: Appendix_files/figure-latex/unnamed-chunk-46-1.pdf Graphic file (type pdf)
 <use Appendix_files/figure-latex/unnamed-chunk-46-1.pdf>
-Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-46-1.pdf  used on input line 1383.
+Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-46-1.pdf  used on input line 1387.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<Appendix_files/figure-latex/unnamed-chunk-46-2.pdf, id=324, 469.755pt x 325.215pt>
+<Appendix_files/figure-latex/unnamed-chunk-46-2.pdf, id=327, 469.755pt x 325.215pt>
 File: Appendix_files/figure-latex/unnamed-chunk-46-2.pdf Graphic file (type pdf)
 <use Appendix_files/figure-latex/unnamed-chunk-46-2.pdf>
-Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-46-2.pdf  used on input line 1384.
+Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-46-2.pdf  used on input line 1388.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1383--1385
+Underfull \hbox (badness 10000) in paragraph at lines 1387--1389
 [][]
  []
 
-[28 <./Appendix_files/figure-latex/unnamed-chunk-46-1.pdf>] [29 <./Appendix_files/figure-latex/unnamed-chunk-46-2.pdf>]
-<Appendix_files/figure-latex/unnamed-chunk-47-1.pdf, id=345, 469.755pt x 325.215pt>
+[29 <./Appendix_files/figure-latex/unnamed-chunk-46-1.pdf>] [30 <./Appendix_files/figure-latex/unnamed-chunk-46-2.pdf>]
+<Appendix_files/figure-latex/unnamed-chunk-47-1.pdf, id=348, 469.755pt x 325.215pt>
 File: Appendix_files/figure-latex/unnamed-chunk-47-1.pdf Graphic file (type pdf)
 <use Appendix_files/figure-latex/unnamed-chunk-47-1.pdf>
-Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-47-1.pdf  used on input line 1426.
+Package pdftex.def Info: Appendix_files/figure-latex/unnamed-chunk-47-1.pdf  used on input line 1430.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[30 <./Appendix_files/figure-latex/unnamed-chunk-47-1.pdf>] [31] (./Appendix.aux)
+[31 <./Appendix_files/figure-latex/unnamed-chunk-47-1.pdf>]
+Overfull \hbox (3.97498pt too wide) in paragraph at lines 1508--1509
+[]|\T1/lmr/m/n/10 <0.0000001$[]$|  
+ []
+
+
+Overfull \hbox (3.97498pt too wide) in paragraph at lines 1510--1511
+[]|\T1/lmr/m/n/10 <0.0000001$[]$|  
+ []
+
+
+Overfull \hbox (3.97498pt too wide) in paragraph at lines 1525--1526
+[]|\T1/lmr/m/n/10 <0.0000001$[]$|  
+ []
+
+
+Overfull \hbox (3.97498pt too wide) in paragraph at lines 1527--1528
+[]|\T1/lmr/m/n/10 <0.0000001$[]$|  
+ []
+
+[32] (./Appendix.aux)
 Package rerunfilecheck Info: File `Appendix.out' has not changed.
 (rerunfilecheck)             Checksum: B17F9E859011592AB1F3B99D666DB23E;1465.
  ) 
 Here is how much of TeX's memory you used:
- 13465 strings out of 476928
- 218233 string characters out of 5824215
- 576592 words of memory out of 5000000
- 34378 multiletter control sequences out of 15000+600000
+ 13464 strings out of 476928
+ 218211 string characters out of 5824215
+ 576566 words of memory out of 5000000
+ 34377 multiletter control sequences out of 15000+600000
  521244 words of font info for 74 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 72i,9n,77p,857b,586s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,9n,77p,857b,584s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/Users/yixuanjiao/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/Users/yixuanjiao/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/Users/yixuanjiao/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/Users/yixuanjiao/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/Users/yixuanjiao/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}</Users/yixuanjiao/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></Users/yixuanjiao/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></Users/yixuanjiao/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></Users/yixuanjiao/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/yixuanjiao/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></Users/yixuanjiao/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/yixuanjiao/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></Users/yixuanjiao/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></Users/yixuanjiao/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></Users/yixuanjiao/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></Users/yixuanjiao/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on Appendix.pdf (31 pages, 578040 bytes).
+Output written on Appendix.pdf (32 pages, 578656 bytes).
 PDF statistics:
- 436 PDF objects out of 1000 (max. 8388607)
- 334 compressed objects within 4 object streams
+ 439 PDF objects out of 1000 (max. 8388607)
+ 336 compressed objects within 4 object streams
  56 named destinations out of 1000 (max. 500000)
  157 words of extra memory for PDF output out of 10000 (max. 10000000)
 
