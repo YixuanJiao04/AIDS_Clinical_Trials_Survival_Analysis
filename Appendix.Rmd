@@ -5,16 +5,227 @@ date: "2023-12-10"
 output: pdf_document
 ---
 
-```{r}
+```{r message= FALSE}
 library(tidyverse)
 library(survival)
 library(survminer)
 library(biostat3)
+library(finalfit)
+library(dplyr)
+library(kableExtra)
+library(ggplot2)
+library(ggpubr)
+library(riskRegression)
+library(regclass)
+```
+
+# EDA
+```{r}
+aids <- read.csv('data/AIDS_Clinical_Trials_Group175.csv')
+aids <- aids%>%
+  mutate(cid = as.factor(cid),
+         
+         trt = as.factor(trt),treat=as.factor(treat),
+                                                                     hemo = as.factor(hemo),
+                                                                     homo = as.factor(homo),
+                                                                     drugs = as.factor(drugs),
+                                                                     race = as.factor(race),
+                                                                     gender = as.factor(gender),
+                                                                     str2 = as.factor(str2),
+                                                                     symptom = as.factor(symptom))
 ```
 
 ```{r}
-aids <- read_csv("data/AIDS_Clinical_Trials_Group175.csv")
+aids <- aids%>%
+  mutate(cid=factor(cid,
+  levels = c(0,1),
+  labels = c("Censoring", 
+             "Failure")),
+  treat=factor(treat,
+  levels = c(0,1),
+  labels = c("ZDV only", 
+             "Others")),
+  hemo=factor(hemo,
+  levels = c(0,1),
+  labels = c("No", 
+             "Yes")),
+  homo=factor(homo,
+  levels = c(0,1),
+  labels = c("No", 
+             "Yes")),
+  gender=factor(gender,
+  levels = c(0,1),
+  labels = c("Female", 
+             "Male")),
+  race=factor(race,
+  levels = c(0,1),
+  labels = c("White", 
+             "Non-white")),
+  drugs=factor(drugs,
+  levels = c(0,1),
+  labels = c("No", 
+             "Yes")),
+  symptom=factor(symptom,
+  levels = c(0,1),
+  labels = c("No", 
+             "Yes"))
+  )
 ```
+
+## sex age race hemo homo drug kanor symptom cd40
+```{r}
+explanatory = c("age", "hemo", "homo", "race","gender","drugs","karnof","cd40","symptom","cd80","wtkg")
+dependent = "treat"
+baseline <- aids %>%
+  mutate(
+        cd80 = ff_label(cd80, "CD8 Count"),
+        wtkg = ff_label(wtkg, "Weight"),
+        gender = ff_label(gender, "Gender"),
+        hemo = ff_label(hemo, "Hemophilia"),
+        homo = ff_label(homo, "Homosexuality"),
+        race = ff_label(race, "Race"),
+        drugs = ff_label(drugs, "History of IV drug use "),
+        karnof = ff_label(karnof, "Karnofsky score of 100"),
+        cd40 = ff_label(cd40, "CD4 count"),
+        age = ff_label(age, "Age"),
+        symptom = ff_label(symptom, "Symptomatic infection"),
+        treat = ff_label(treat, "Treatment")
+    )%>%
+  summary_factorlist(dependent, explanatory,column = TRUE, total_col = TRUE,,col_totals_prefix = "N=",add_dependent_label = TRUE) 
+
+baseline
+
+kable(baseline,caption = "Base-Line Characteristics of the Patients According to the Treatment Indicator", booktabs=T)%>% kable_styling(latex_option = c("hold_position"), position = "center")
+```
+```{r}
+ggplot(data=aids, aes(x=treat, fill=cid)) +
+  geom_bar()+
+  scale_fill_brewer(palette="Pastel1")+
+  ggtitle("Figure 1: Distribution of  Treatment VS. Patient Status")+
+  guides(fill = guide_legend(title = "Treatment"))
+```
+
+```{r}
+ggplot(aids, aes(x=age, fill=cid)) +
+  geom_histogram(alpha=0.5, position="identity")+
+  scale_fill_brewer(palette ="Pastel1")+
+  ggtitle("Figure 2: Distribution of Patient Age VS. Status")
+
+ggplot(aids, aes(x=wtkg, fill=cid)) +
+  geom_histogram(alpha=0.5, position="identity")+
+  scale_fill_brewer(palette ="Pastel1")+
+  ggtitle("Figure 3: Distribution of Patient Weight VS. Status")
+```
+```{r}
+ggplot(aids, aes(x=time, fill=cid)) +
+  geom_histogram(alpha=0.5, position="identity")+
+  scale_fill_brewer(palette ="Pastel1")+
+  ggtitle("Figure 4: Distribution of Time to Failure or Censoring")
+```
+```{r}
+p1 <- ggplot(aids,aes(x= treat, y=cd40,color=treat)) + geom_boxplot(show.legend = FALSE)+labs(x="")+scale_color_manual( values = c("#DC9FB4", "mediumpurple"))+theme(axis.title.y = element_text(size=8))+
+  theme_minimal()+ 
+ scale_y_continuous(limits = c(0, 1000))
+
+
+p2 <- ggplot(aids,aes(x= treat, y=cd420,color=treat)) + geom_boxplot(show.legend = FALSE)+labs(x="")+scale_color_manual( values = c("#DC9FB4", "mediumpurple"))+theme(axis.title.y = element_text(size=8))+
+  theme_minimal()+
+ scale_y_continuous(limits = c(0, 1000))
+
+p <- ggpubr::ggarrange(p1, p2, ncol=2,nrow = 1,common.legend = TRUE)
+
+ggpubr::annotate_figure(p, top = ggpubr::text_grob("Figure 5: CD4 Count Change VS. Treatment Groups", color = "darkgrey",face = "bold", size = 13))
+```
+
+```{r}
+p3 <- ggplot(aids,aes(x= treat, y=cd80,color=treat)) + geom_boxplot(show.legend = FALSE)+labs(x="")+scale_color_manual( values = c("#DC9FB4", "mediumpurple"))+theme(axis.title.y = element_text(size=8))+
+  theme_minimal()+ 
+ scale_y_continuous(limits = c(0, 4000))
+
+p4 <- ggplot(aids,aes(x= treat, y=cd820,color=treat)) + geom_boxplot(show.legend = FALSE)+labs(x="")+scale_color_manual( values = c("#DC9FB4", "mediumpurple"))+theme(axis.title.y = element_text(size=8))+
+  theme_minimal()+ 
+ scale_y_continuous(limits = c(0, 4000))
+
+p<- ggarrange(p3,p4,ncol=2,align = "hv",nrow = 1,common.legend = TRUE)
+annotate_figure(p, top = text_grob("Figure 6: CD8 Count Change VS. Treatment Groups", color = "#0F2540",face = "bold", size = 13))
+```
+
+
+# Non-parametric tests
+```{r}
+aids <- read_csv("data/AIDS_Clinical_Trials_Group175.csv")
+aids %>% head()
+```
+
+```{r}
+#KM estimate 
+km_fit_trt <- survfit(Surv(time, cid) ~ trt, data = aids)
+pkm <- km_fit_trt %>% ggsurvplot(data = aids,
+                      fun = "pct", #can be replaced by cum hazard
+                      conf.int = TRUE,
+                      risk.table = TRUE,
+                      pval = TRUE,  
+                      pval.coord = c(0,55),
+                      fontsize = 2.5,
+                      ggtheme = theme_light(),
+                      xlab =  "Time in days",
+                      title = "Figure 4: Kaplan-Meier Survival Function Estimate",
+                      legend.title = "",
+                      legend.labs = c("ZDV only","ZDV + ddl", "ZDV + Zal", "ddl only"),
+                      ylim = c(55, 100))
+
+hkm <- km_fit_trt %>% ggsurvplot(data = aids,
+                      fun = "cumhaz", #can be replaced by cum hazard
+                      conf.int = TRUE,
+                      risk.table = TRUE,
+                      pval = TRUE,  
+                      fontsize = 2.5,
+                      ggtheme = theme_light(),
+                      xlab =  "Time in days",
+                      title = "Figure 5: Kaplan-Meier Cumulative Hazard Function",
+                      legend.title = "",
+                      legend.labs = c("ZDV only","ZDV + ddl", "ZDV + Zal", "ddl only"))
+pkm
+hkm
+```
+
+
+```{r}
+quantile(km_fit_trt,probs = c(0.1,0.15,0.2))$quantile %>% knitr::kable(caption = "t1")
+```
+Table: Quantile Survival Time (in days) by Treatments
+
+|      Treatment|  $90^{th}$|  $85^{th}$|  $80^{th}$|
+|:-----|---:|---:|---:|
+|ZDV only | 347 (284,406)| 468 (394,557)| 569 (484,649)|
+|ZDV + ddl | 626 (559,721)| 822 (691,929)| 986 (876,NA)|
+|ZDV + Zal | 610 (476,748)| 806 (720,910| 972 (867,NA)|
+|ddl only | 537 (476,631)| 672 (613,813)| 898 (760,994)|
+
+```{r}
+survdiff(Surv(time, cid) ~ trt, data = aids)
+```
+
+```{r}
+aids %>% 
+  mutate(trt = case_when(trt == "0" ~ "ZDV only",
+                          trt == "1" ~ "ZDV + ddl",
+                          trt == "2" ~ "ZDV + Zal",
+                          trt == "3" ~ "ddl only")) %>%
+  pairwise_survdiff(Surv(time, cid) ~ trt, data = .,p.adjust.method = "BH") %>%
+  broom::tidy()
+```
+Table: Pairwise Log-rank Tests by Treatments
+
+|group1    |group2    |   P-value|
+|:---------|:---------|---------:|
+|ZDV + ddl |ddl only  | 0.2784441|
+|ZDV + Zal |ddl only  | 0.4776330|
+|ZDV + Zal |ZDV + ddl | 0.6362565|
+|ZDV only  |ddl only  | 0.0000075$^{***}$|
+|ZDV only  |ZDV + ddl | 0.0000000$^{***}$|
+|ZDV only  |ZDV + Zal | 0.0000002$^{***}$|
+
 
 ### KM curve for zdv history stratify
 ```{r}
@@ -226,8 +437,139 @@ km_fit_trt9 %>% ggsurvplot(data = aids_azt_no,
 
 ```{r}
 survfit_result_azt <- survfit(Surv(time, cid) ~ strata(str2) + trt, data = aids)
-sur
+survfit_result_azt
 ```
 
+# Cox-PH model
 
+```{r}
+aids = read_csv("data/AIDS_Clinical_Trials_Group175.csv") %>% mutate(trt = as.factor(trt),
+                                                                     hemo = as.factor(hemo),
+                                                                     homo = as.factor(homo),
+                                                                     drugs = as.factor(drugs),
+                                                                     race = as.factor(race),
+                                                                     gender = as.factor(gender),
+                                                                     str2 = as.factor(str2),
+                                                                     symptom = as.factor(symptom)) %>% dplyr::select(time, cid, trt, age, wtkg, hemo, homo, drugs, karnof, race, gender, str2, symptom, cd40, cd80) %>% arrange(time) %>% drop_na()
+```
 
+#### model selection
+
+*selection on personal information*
+```{r}
+selectCox(Surv(time, cid) ~ trt + age + wtkg + homo + race + gender, data = aids, rule = "aic")
+```
+$In
+[1] "trt" "age"
+
+*selection on medical history/treatment history/lab results*
+```{r}
+selectCox(Surv(time, cid) ~ trt + hemo + drugs + karnof + str2 + symptom + cd40 + cd80, data = aids, rule = "aic")
+```
+$In
+[1] "trt"     "drugs"   "karnof"  "str2"    "symptom" "cd40"    "cd80"  
+
+*selection with interaction*
+```{r}
+selectCox(Surv(time, cid) ~ trt + drugs + karnof + str2 + symptom + cd40 + cd80 + age + age * drugs + age * trt, data = aids, rule = "aic")
+```
+$In
+[1] "trt"         "karnof"      "str2"        "symptom"     "cd40"        "cd80"        "drugs * age"
+
+*final model*
+```{r}
+cox1 = coxph(Surv(time, cid) ~ trt + karnof + str2 + symptom + cd40 + cd80 + age * drugs, data = aids)
+```
+
+```{r}
+summary(cox1)
+```
+
+*final model with age_group*
+```{r}
+aids = aids %>% mutate(age_group = as.factor(ifelse(age >= 11 & age <= 30, "11-30", ifelse(age >= 31 & age <= 50, "31-50", "51-70"))))
+```
+
+```{r}
+cox2 = coxph(Surv(time, cid) ~ trt + age_group + drugs + karnof + str2 + symptom + cd40 + cd80 + age_group * drugs, data = aids)
+```
+
+```{r}
+summary(cox2)
+```
+
+#### model checking
+
+*check multicollinearity*
+```{r}
+VIF(cox2)
+```
+
+*Plot log-log survival curve*
+```{r}
+par(mfrow = c(2,4))
+var_list = names(aids)
+
+for (i in var_list) {
+plot(survfit(Surv(time, cid) ~ aids[[i]], data = aids),
+fun = 'cloglog',
+conf.int = FALSE,
+col = 1,
+lty = 1,
+xlab = "Time",
+ylab = "Log-log of S(t)",
+main = "Log-Log Survival Curves")
+}
+```
+
+*Plot the observed and fitted*
+```{r}
+par(mfrow = c(1,1))
+
+plot(survfit(Surv(time, cid) ~ 1, data = aids),
+conf.int = FALSE,
+col = 1,
+lty = 1,
+ylim = c(0.55,1),
+xlab = "Time",
+ylab = "Survival Probability",
+main = "Observed vs Fitted Survival Curves")
+
+lines(survfit(cox2),
+conf.int = FALSE,
+col = 2,
+lty = 2,
+ylim = c(0.55,1))
+
+legend("bottomleft",
+legend = c("KM", "Cox"),
+col = 1:2,
+lty = c(1, 2),
+cex = 0.5,
+merge = TRUE)
+```
+
+```{r}
+broom::tidy(cox2) %>% 
+  mutate(`exp(estimate)` = exp(estimate)) %>% 
+  relocate(`exp(estimate)`, .after = estimate) #%>%
+  #kable(caption = "Summary of Final Cox-PH model")
+```
+
+Table: Summary of Final Cox-PH model
+
+|term                  |   estimate| exp(estimate)| std.error|  statistic|   p.value|
+|:---------------------|----------:|-------------:|---------:|----------:|---------:|
+|trt1                  | -0.8001201|     0.4492750| 0.1242171| -6.4413036| <0.0000001|
+|trt2                  | -0.6657643|     0.5138806| 0.1216476| -5.4728949| <0.0000001|
+|trt3                  | -0.5673093|     0.5670492| 0.1159872| -4.8911374| 0.0000010|
+|age_group31-50        | -0.0962569|     0.9082307| 0.1037108| -0.9281280| 0.3533412|
+|age_group51-70        |  0.3463719|     1.4139283| 0.1901102|  1.8219527| 0.0684622|
+|drugs1                | -0.3664675|     0.6931787| 0.3445059| -1.0637481| 0.2874428|
+|karnof                | -0.0238122|     0.9764691| 0.0070067| -3.3984920| 0.0006776|
+|str21                 |  0.3772408|     1.4582554| 0.0959051|  3.9334819| 0.0000837|
+|symptom1              |  0.4363595|     1.5470649| 0.1030943|  4.2326242| 0.0000231|
+|cd40                  | -0.0041861|     0.9958226| 0.0004476| -9.3526642| <0.0000001|
+|cd80                  |  0.0004689|     1.0004690| 0.0000830|  5.6524859| <0.0000001|
+|age_group31-50:drugs1 |  0.0704626|     1.0730045| 0.3831692|  0.1838943| 0.8540964|
+|age_group51-70:drugs1 |  0.4512700|     1.5703052| 0.6975511|  0.6469347| 0.5176742|
