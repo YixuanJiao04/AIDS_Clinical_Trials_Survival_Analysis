@@ -71,6 +71,27 @@ aids <- aids%>%
              "Yes"))
   )
 ```
+Table: Variable description
+
+|Variable    |  Description|
+|:-|:------|
+|age | age (yrs) at baseline|
+|race | race (0=White, 1=non-white)|
+|gender | gender (0=F, 1=M)|
+|trt  | treatment indicator (0 = ZDV only; 1 = ZDV + ddI, 2 = ZDV + Zal, 3 = ddI only)|
+|drug  | history of IV drug use ((0=no, 1=yes))|
+|hemo  | hemophilia (0=no, 1=yes)|
+|homo | homosexual activity (0=no, 1=yes)|
+|kanor | Karnofsky score (0-100)|
+|symptom | symptomatic infection indicator (0=asymp, 1=symp)|
+|cd40  | CD4 count at baseline|
+|cd80  | CD8 count at baseline|
+|str2  | antiretroviral history (0=naive, 1=experienced)|
+|oprior  | Non-ZDV antiretroviral therapy pre-175 (0=no, 1=yes)|
+|z30  | ZDV in the 30 days prior to 175 (0=no, 1=yes)|
+|zpiror  | ZDV prior to 175 (0=no, 1=yes)|
+
+
 
 ## sex age race hemo homo drug kanor symptom cd40
 ```{r}
@@ -95,8 +116,10 @@ baseline <- aids %>%
 
 baseline
 
+
 kable(baseline,caption = "Base-Line Characteristics of the Patients According to the Treatment Indicator", booktabs=T)%>% kable_styling(latex_option = c("hold_position"), position = "center")
 ```
+
 ```{r}
 ggplot(data=aids, aes(x=treat, fill=cid)) +
   geom_bar()+
@@ -405,9 +428,9 @@ km_fit_trt8 %>% ggsurvplot(data = aids_azt_yes,
                       risk.table = TRUE,
                       fontsize = 2,
                       ggtheme = theme_light(),
-                      title = "Kaplan-Meier Estimate Without medical history",
+                      title = "Kaplan-Meier Estimate with medical history",
                       legend.title = "",
-                      legend.labs = levels(aids$trt),
+                      legend.labs = c("ZDV only","ZDV + ddl", "ZDV + Zal", "ddl only"),
                       ylim = c(55, 100))
 
 ```
@@ -428,9 +451,9 @@ km_fit_trt9 %>% ggsurvplot(data = aids_azt_no,
                       risk.table = TRUE,
                       fontsize = 2,
                       ggtheme = theme_light(),
-                      title = "Kaplan-Meier Estimate Without medical history",
+                      title = "Kaplan-Meier Estimate without medical history",
                       legend.title = "",
-                      legend.labs = levels(aids$trt),
+                      legend.labs = c("ZDV only","ZDV + ddl", "ZDV + Zal", "ddl only"),
                       ylim = c(55, 100))
 
 ```
