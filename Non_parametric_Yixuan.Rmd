@@ -9,6 +9,7 @@ output: pdf_document
 library(tidyverse)
 library(survival)
 library(survminer)
+library(patchwork)
 library(biostat3)
 aids <- read_csv("data/AIDS_Clinical_Trials_Group175.csv")
 ```
@@ -20,64 +21,71 @@ aids %>% head()
 ```{r}
 #KM
 km_fit_trt <- survfit(Surv(time, cid) ~ trt, data = aids)
-km_fit_trt %>% ggsurvplot(data = aids,
+pkm <- km_fit_trt %>% ggsurvplot(data = aids,
                       fun = "pct", #can be replaced by cum hazard
                       conf.int = TRUE,
                       risk.table = TRUE,
                       pval = TRUE,  
                       pval.coord = c(0,55),
-                      fontsize = 2,
+                      fontsize = 2.5,
                       ggtheme = theme_light(),
                       xlab =  "Time in days",
-                      title = "Kaplan-Meier Survival Function Estimate",
+                      title = "Figure 4: Kaplan-Meier Survival Function Estimate",
                       legend.title = "",
                       legend.labs = c("ZDV only","ZDV + ddl", "ZDV + Zal", "ddl only"),
                       ylim = c(55, 100))
-```
 
-```{r}
-#FH
-fh_fit_trt <- survfit(Surv(time, cid) ~ trt, type = "fleming", data = aids)
-fh_fit_trt %>% ggsurvplot(data = aids,
-                      fun = "pct", #can be replaced by cum hazard
+hkm <- km_fit_trt %>% ggsurvplot(data = aids,
+                      fun = "cumhaz", #can be replaced by cum hazard
                       conf.int = TRUE,
                       risk.table = TRUE,
                       pval = TRUE,  
-                      pval.coord = c(0,55),
-                      fontsize = 2,
+                      fontsize = 2.5,
                       ggtheme = theme_light(),
                       xlab =  "Time in days",
-                      title = "Fleming-Harrington Survival Function Estimate",
+                      title = "Figure 5: Kaplan-Meier Cumulative Hazard Function",
                       legend.title = "",
-                      legend.labs = c("ZDV only","ZDV + ddl", "ZDV + Zal", "ddl only"),
-                      ylim = c(55, 100))
+                      legend.labs = c("ZDV only","ZDV + ddl", "ZDV + Zal", "ddl only"))
+pkm
+hkm
 ```
+
 
 ```{r}
-#life table
-trt0 <- lifetab2(Surv(time,cid) ~ trt, aids)[[1]]
-trt1 <- lifetab2(Surv(time,cid) ~ trt, aids)[[2]]
-trt2 <- lifetab2(Surv(time,cid) ~ trt, aids)[[3]]
-trt3 <- lifetab2(Surv(time,cid) ~ trt, aids)[[4]]
-
-ggplot() + 
-  geom_line(data = trt0, aes(x = tstart, y = surv, color = "ZDV only")) +
-  geom_line(data = trt1, aes(x = tstart, y = surv,color = "ZDV + ddl")) +
-  geom_line(data = trt2, aes(x = tstart, y = surv,color = "ZDV + Zal")) +
-  geom_line(data = trt3, aes(x = tstart, y = surv,color = "ddl only")) +
-  labs(color = "treatment")
+quantile(km_fit_trt,probs = c(0.1,0.15,0.2))$quantile %>% knitr::kable(caption = "t1")
+quantile(km_fit_trt,probs = c(0.1,0.15,0.2))$quantile %>% knitr::kable(caption = "t2")
 ```
+Table: Quantile Survival Time (in days) by Treatments
 
-```{r}
-quantile(km_fit_trt)
-```
-
+|      Treatment|  $90^{th}$|  $85^{th}$|  $80^{th}$|
+|:-----|---:|---:|---:|
+|ZDV only | 347 (284,406)| 468 (394,557)| 569 (484,649)|
+|ZDV + ddl | 626 (559,721)| 822 (691,929)| 986 (876,NA)|
+|ZDV + Zal | 610 (476,748)| 806 (720,910| 972 (867,NA)|
+|ddl only | 537 (476,631)| 672 (613,813)| 898 (760,994)|
 
 ```{r}
 survdiff(Surv(time, cid) ~ trt, data = aids)
 ```
 
 ```{r}
-pairwise_survdiff(Surv(time, cid) ~ trt, data = aids,p.adjust.method = "holm")
+aids %>% 
+  mutate(trt = case_when(trt == "0" ~ "ZDV only",
+                          trt == "1" ~ "ZDV + ddl",
+                          trt == "2" ~ "ZDV + Zal",
+                          trt == "3" ~ "ddl only")) %>%
+  pairwise_survdiff(Surv(time, cid) ~ trt, data = .,p.adjust.method = "BH") %>%
+  broom::tidy()
 ```
+Table: Pairwise Log-rank Tests by Treatments
+
+|group1    |group2    |   P-value|
+|:---------|:---------|---------:|
+|ZDV + ddl |ddl only  | 0.2784441|
+|ZDV + Zal |ddl only  | 0.4776330|
+|ZDV + Zal |ZDV + ddl | 0.6362565|
+|ZDV only  |ddl only  | 0.0000075*|
+|ZDV only  |ZDV + ddl | 0.0000000*|
+|ZDV only  |ZDV + Zal | 0.0000002*|
+
 
